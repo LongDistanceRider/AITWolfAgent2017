@@ -18,8 +18,18 @@ public class Response {
 
 	static {
 		// ファイル読み込みしろよって思う。2018では直す
-		responceMap.put("なぜAgentに投票しましたか？", "そんなに考えてなかった。あえて言うなら直感かな");
-
+		responseMap.put("なぜAgent[]に投票しましたか？", "そんなに考えてなかった。あえて言うなら直感かな");
+		responseMap.put("あなたはAgent[]が人狼だと思いますか？", "人狼だと思ったことはないな。どっちかって言うと村人かなって");
+		responseMap.put("Agent[]って人狼だと思う？", "人狼だと思ったことはないな。どっちかって言うと村人かなって");
+		responseMap.put("人狼はAgent[]だと思う？", "人狼だと思ったことはないな。どっちかって言うと村人かなって");
+		responseMap.put("人狼はAgent[]かなって思う？", "人狼だと思ったことはないな。どっちかって言うと村人かなって");
+		responseMap.put("どうしてAgent[]に投票したの？", "直感でこいつだ！って思ったんだよ");
+		responseMap.put("Agent[]に投票した理由は？", "直感でこいつだ！って思ったんだよ");
+		responseMap.put("理由が聞きたいな", "直感でこいつだ！って思ったんだよ");
+		responseMap.put("どうして投票したの？", "直感でこいつだ！って思ったんだよ");
+		responseMap.put("あなたはなぜAgent[]に投票した？","直感でこいつだ！って思ったんだよ");
+		responseMap.put("あれ？なんでAgent[]に投票？", "直感でこいつだ！って思ったんだよ");
+		responseMap.put("Agent[]はなんでそう思うの？", "なんとなくそう思ったんだ");
 	}
 
 	/**

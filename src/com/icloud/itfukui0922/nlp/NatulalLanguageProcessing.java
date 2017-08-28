@@ -85,7 +85,7 @@ public class NatulalLanguageProcessing implements Callable<Boolean> {
 		return species;
 	}
 
-	public List<String> getSeparateTalks () {
+	public List<String> getSeparateTalks() {
 		return separateTalks;
 	}
 
@@ -114,10 +114,10 @@ public class NatulalLanguageProcessing implements Callable<Boolean> {
 				|| text.equals("Skip") || isChat(text)) {
 			// 解析する必要のない発話を除外（自分自身の発言，中身のない発言，Over・Skip発言，雑談
 			//
-			if(talk.getAgent() == currentGameInfo.getAgent()) {
-				System.out.println("Agent[me]," + text + ",notNeed");
-			} else if(!text.equals("Over") && isChat(text)) {
-				System.out.println(talk.getAgent() + "," + text + ",notNeed");
+			if (talk.getAgent() == currentGameInfo.getAgent()) {
+				System.out.println(currentGameInfo.getDay() + "Agent[me]," + text + ",notNeed");
+			} else if (!text.equals("Over") && isChat(text)) {
+				System.out.println(currentGameInfo.getDay() + "" + talk.getAgent() + "," + text + ",notNeed");
 			}
 			//
 			return false;
@@ -159,19 +159,27 @@ public class NatulalLanguageProcessing implements Callable<Boolean> {
 			switch (topic) {
 			case COMINGOUT:
 
-				Role role = roleCheck(key);
-				if (role == Role.NOTROLE) {
-					topics.put(key, Topic.UNTAG);
+				// 私，僕，俺，自分などの単語がない場合はカミングアウトとしない
+				Role role = Role.NOTROLE;
+				if (!watashiCheck(key)) {
+					role = roleCheck(key);
+					if (role == Role.NOTROLE) {
+						topic = Topic.UNTAG;
+						topics.put(key, Topic.UNTAG);
+					} else {
+						roles.put(key, role); // 役職
+					}
 				} else {
-					roles.put(key, role); // 役職
+					topic = Topic.UNTAG;
+					topics.put(key, Topic.UNTAG);
 				}
-
-				System.out.println(talk.getAgent() + "," + key + "," + topic + "," + role);
+				System.out.println(currentGameInfo.getDay() + "" + talk.getAgent() + "," + key + "," + topic + "," + role);
 				break;
 			case DIV_INQ:
 				Agent target = targetCheck(key);
 				Species species2 = speciesCheck(key);
 				if (target == null || species2 == Species.UNKNOWN) {
+					topic = Topic.UNTAG;
 					topics.put(key, Topic.UNTAG);
 				} else {
 					targets.put(key, target);
@@ -184,11 +192,12 @@ public class NatulalLanguageProcessing implements Callable<Boolean> {
 				} else {
 					logger.fine("target推定結果：null");
 				}
-				System.out.println(talk.getAgent() + "," + key + "," + topic + "," + target + "," + species2);
+				System.out.println(currentGameInfo.getDay() + "" + talk.getAgent() + "," + key + "," + topic + "," + target + "," + species2);
 				break;
 			case QUESTION:
 				Agent target2 = targetCheck(key);
 				if (target2 == null) {
+					topic = Topic.UNTAG;
 					topics.put(key, Topic.UNTAG);
 				} else {
 					targets.put(key, targetCheck(key));
@@ -199,14 +208,34 @@ public class NatulalLanguageProcessing implements Callable<Boolean> {
 				} else {
 					logger.fine("target推定結果：null");
 				}
-				System.out.println(talk.getAgent() + "," + key + "," + topic + "," + target2);
+				System.out.println(currentGameInfo.getDay() + "" + talk.getAgent() + "," + key + "," + topic + "," + target2);
 			default:
+				System.out.println(currentGameInfo.getDay() + "" + talk.getAgent() + "," + key + "," + topic);
 				break;
 			}
 
-
 		}
 		return true;
+	}
+
+	/*
+	 * 一文に一人称の単語があるか
+	 */
+	private boolean watashiCheck(String text) {
+		// 特定の単語があるかで役職を返す
+		if (text.indexOf("私") != -1) {
+			return true;
+		} else if (text.indexOf("自分") != -1) {
+			return true;
+		} else if (text.indexOf("俺") != -1) {
+			return true;
+		} else if (text.indexOf("わたし") != -1) {
+			return true;
+		} else if (text.indexOf("あたし") != -1) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/*
@@ -214,17 +243,15 @@ public class NatulalLanguageProcessing implements Callable<Boolean> {
 	 */
 	private Role roleCheck(String text) {
 		// 特定の単語があるかで役職を返す
-		if (text.indexOf("占") != -1) {
+		if (text.indexOf("占い師") != -1) {
 			return Role.SEER;
-		} else if (text.indexOf("狼") != -1) {
+		} else if (text.indexOf("人狼") != -1) {
 			return Role.WEREWOLF;
-		} else if (text.indexOf("村") != -1) {
+		} else if (text.indexOf("村人") != -1) {
 			return Role.VILLAGER;
-		} else if (text.indexOf("裏") != -1) {
+		} else if (text.indexOf("裏切り者") != -1) {
 			return Role.POSSESSED;
-		} else if (text.indexOf("狂") != -1) {
-			return Role.POSSESSED;
-		} else if (text.indexOf("者") != -1) {
+		} else if (text.indexOf("狂人") != -1) {
 			return Role.POSSESSED;
 		}
 
@@ -237,13 +264,13 @@ public class NatulalLanguageProcessing implements Callable<Boolean> {
 	private Species speciesCheck(String text) {
 		if (text.indexOf("白") != -1) {
 			return Species.HUMAN;
-		} else if (text.indexOf("村") != -1) {
+		} else if (text.indexOf("村人") != -1) {
 			return Species.HUMAN;
 		} else if (text.indexOf("人間") != -1) {
 			return Species.HUMAN;
 		} else if (text.indexOf("黒") != -1) {
 			return Species.WEREWOLF;
-		} else if (text.indexOf("狼") != -1) {
+		} else if (text.indexOf("人狼") != -1) {
 			return Species.WEREWOLF;
 		}
 		return Species.UNKNOWN;
