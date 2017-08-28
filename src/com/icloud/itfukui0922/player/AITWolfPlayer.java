@@ -32,6 +32,7 @@ import org.aiwolf.common.net.GameSetting;
 
 import com.icloud.itfukui0922.dictionary.Chat;
 import com.icloud.itfukui0922.nlp.NatulalLanguageProcessing;
+import com.icloud.itfukui0922.nlp.Response;
 import com.icloud.itfukui0922.nlp.Role;
 import com.icloud.itfukui0922.nlp.Species;
 import com.icloud.itfukui0922.nlp.Topic;
@@ -403,7 +404,12 @@ public class AITWolfPlayer implements Player {
 						Agent target2 = nlp.getTargets().get(key);
 						// 自分自身に発言がされた場合は何か言い返す
 						if (target2.equals(currentGameInfo.getAgent())) {
-							talkQueue.offer(">>" + agent + " そんなに考えてなかったな");
+							String response = Response.responce(key);
+							if (response.equals("")) {
+								talkQueue.offer(">>" + agent + " そんなに考えてなかったな");
+							} else {
+								talkQueue.offer(">>" + agent + response);
+							}
 						}
 						break;
 					default:

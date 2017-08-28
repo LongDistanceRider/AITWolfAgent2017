@@ -27,6 +27,7 @@ public class Chat {
 	static List<String> spokenList = new ArrayList<>();
 
 	static {
+		// ファイル読み込みしろよって思う。2018では直す
 		greetingList.add("よろしくお願いします！");
 		greetingList.add("初めまして、これからよろしくね！");
 		greetingList.add("よろー。本気でいくよ。");

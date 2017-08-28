@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="lib/jsonic-1.3.10.jar"/>
 	<classpathentry kind="lib" path="lib/kuromoji-0.7.7.jar"/>
 	<classpathentry kind="lib" path="lib/libsvm.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang3-3.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
