@@ -30,6 +30,7 @@ import org.aiwolf.common.data.Talk;
 import org.aiwolf.common.net.GameInfo;
 import org.aiwolf.common.net.GameSetting;
 
+import com.icloud.itfukui0922.dictionary.Chat;
 import com.icloud.itfukui0922.nlp.NatulalLanguageProcessing;
 import com.icloud.itfukui0922.nlp.Role;
 import com.icloud.itfukui0922.nlp.Species;
@@ -60,6 +61,10 @@ public class AITWolfPlayer implements Player {
 	boolean isGreeting;
 	/* フィニッシュしたか（finish()が２度呼ばれるみたいで，不都合があるので） */
 	boolean isfinish;
+	/* 雑談回数を記録 */
+	int chatTimes = 0;
+	/* 雑談回数制限（1日のうちに何回発言させるか */
+	final static int CHAT_LIMIT = 3;
 
 	/**
 	 * 襲撃対象を返すメソッド 占い師COした人を優先的に狙う．いない場合は生存プレイヤーから適当に返す 狂人COしたら候補者から外す
@@ -212,6 +217,8 @@ public class AITWolfPlayer implements Player {
 		}
 		// ----- talkListHeadのリセット -----
 		talkListHead = 0;
+		// ----- chatTimesのリセット -----
+		chatTimes = 0;
 		logger.config("==========");
 	}
 
@@ -327,7 +334,7 @@ public class AITWolfPlayer implements Player {
 				return Talk.OVER; // 挨拶し終わったのでOVERを返す
 			} else {
 				isGreeting = true;
-				return "よろしくお願いします!"; // 挨拶
+				return Chat.retrunGreeting(); // 挨拶
 			}
 		}
 
@@ -415,6 +422,12 @@ public class AITWolfPlayer implements Player {
 		if (!talkQueue.isEmpty()) {
 			logger.config("==========");
 			return talkQueue.poll();
+		} else {
+			// 発言キューが空になったので，雑談文を"CHAT_LIMIT"つほど入れ込む
+			while (chatTimes < CHAT_LIMIT) {
+				chatTimes++;
+				return Chat.returnChat(currentGameInfo.getDay(), boardSurface.getMyRole());
+			}
 		}
 		logger.config("==========");
 		return Talk.OVER;
