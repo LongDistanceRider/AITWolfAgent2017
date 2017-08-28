@@ -1,0 +1,7 @@
+comingout,2
+question,6
+untag,7
+estimate,4
+div_inq,3
+vote,5
+﻿comingout,1
