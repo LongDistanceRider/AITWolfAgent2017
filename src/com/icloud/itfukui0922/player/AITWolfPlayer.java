@@ -23,16 +23,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import org.aiwolf.client.lib.Topic;
 import org.aiwolf.common.data.Agent;
 import org.aiwolf.common.data.Judge;
 import org.aiwolf.common.data.Player;
-import org.aiwolf.common.data.Species;
 import org.aiwolf.common.data.Talk;
 import org.aiwolf.common.net.GameInfo;
 import org.aiwolf.common.net.GameSetting;
 
 import com.icloud.itfukui0922.nlp.NatulalLanguageProcessing;
+import com.icloud.itfukui0922.nlp.Role;
+import com.icloud.itfukui0922.nlp.Species;
+import com.icloud.itfukui0922.nlp.Topic;
 import com.icloud.itfukui0922.strategy.AgentInfo;
 import com.icloud.itfukui0922.strategy.BoardSurface;
 import com.icloud.itfukui0922.strategy.SeerReport;

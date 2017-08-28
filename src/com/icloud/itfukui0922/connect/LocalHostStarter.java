@@ -5,13 +5,15 @@ import java.net.SocketTimeoutException;
 import org.aiwolf.common.data.Role;
 
 public class LocalHostStarter extends Starter {
+	static final int PORT = 10002;
+
 	public static void main(String[] args) {
 		try {
-			startServer(10001, 1, 5);
+			startServer(PORT, 1, 5);
 
-			startClient("com.icloud.itfukui0922.player.AITWolfPlayer", "AITWolf", "localhost", 10001, 1, Role.SEER);
-			startClient("com.icloud.itfukui0922.player.DammyPlayer2", "Dammy2", "localhost", 10001, 3);
-			startClient("com.icloud.itfukui0922.player.DammyPlayer", "Dammy", "localhost", 10001, 1);
+			startClient("com.icloud.itfukui0922.player.AITWolfPlayer", "AITWolf", "localhost", PORT, 1, Role.SEER);
+			startClient("com.icloud.itfukui0922.player.DammyPlayer2", "Dammy2", "localhost", PORT, 3);
+			startClient("com.icloud.itfukui0922.player.DammyPlayer1", "Dammy1", "localhost", PORT, 1);
 
 //			startClient("com.icloud.itfukui0922.AITWolfPlayer", "AITWolf", "localhost", 10001, 4);
 		} catch (SocketTimeoutException e) {
