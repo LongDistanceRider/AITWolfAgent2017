@@ -97,6 +97,7 @@ public class NatulalLanguageProcessing implements Callable<Boolean> {
 		this.talk = talk;
 		topics = new HashMap<>();
 		roles = new HashMap<>();
+		targets = new HashMap<>();
 	}
 
 	/**
@@ -110,13 +111,14 @@ public class NatulalLanguageProcessing implements Callable<Boolean> {
 		Logger logger = Logger.getLogger("main" + currentGameInfo.getAgent());
 		// ----- フィルタリング１ -----
 		String text = talk.getText();
+
 		if (talk.getAgent() == currentGameInfo.getAgent() || text.equals("") || text.equals("Over")
 				|| text.equals("Skip") || isChat(text)) {
 			// 解析する必要のない発話を除外（自分自身の発言，中身のない発言，Over・Skip発言，雑談
 			//
 			if (talk.getAgent() == currentGameInfo.getAgent()) {
 				System.out.println(currentGameInfo.getDay() + "Agent[me]," + text + ",notNeed");
-			} else if (!text.equals("Over") && isChat(text)) {
+			} else {
 				System.out.println(currentGameInfo.getDay() + "" + talk.getAgent() + "," + text + ",notNeed");
 			}
 			//
@@ -136,6 +138,7 @@ public class NatulalLanguageProcessing implements Callable<Boolean> {
 			if (isChat(string)) {
 				continue;
 			}
+
 			Future<String> future = executorService.submit(new SVM(Classifier.Topic, string));
 			try {
 				// ここでロジックエラー発生する可能性がある
@@ -173,7 +176,8 @@ public class NatulalLanguageProcessing implements Callable<Boolean> {
 					topic = Topic.UNTAG;
 					topics.put(key, Topic.UNTAG);
 				}
-				System.out.println(currentGameInfo.getDay() + "" + talk.getAgent() + "," + key + "," + topic + "," + role);
+				System.out.println(
+						currentGameInfo.getDay() + "" + talk.getAgent() + "," + key + "," + topic + "," + role);
 				break;
 			case DIV_INQ:
 				Agent target = targetCheck(key);
@@ -192,23 +196,22 @@ public class NatulalLanguageProcessing implements Callable<Boolean> {
 				} else {
 					logger.fine("target推定結果：null");
 				}
-				System.out.println(currentGameInfo.getDay() + "" + talk.getAgent() + "," + key + "," + topic + "," + target + "," + species2);
+				System.out.println(currentGameInfo.getDay() + "" + talk.getAgent() + "," + key + "," + topic + ","
+						+ target + "," + species2);
 				break;
 			case QUESTION:
 				Agent target2 = targetCheck(key);
 				if (target2 == null) {
 					topic = Topic.UNTAG;
 					topics.put(key, Topic.UNTAG);
+					System.out.println(currentGameInfo.getDay() + "" + talk.getAgent() + "," + key + ", UNTAG");
 				} else {
-					targets.put(key, targetCheck(key));
+					targets.put(key, target2);
+					System.out.println(
+							currentGameInfo.getDay() + "" + talk.getAgent() + "," + key + "," + topic + "," + target2);
 				}
 
-				if (targets.get(key) != null) {
-					logger.fine("target推定結果：" + targets.get(key));
-				} else {
-					logger.fine("target推定結果：null");
-				}
-				System.out.println(currentGameInfo.getDay() + "" + talk.getAgent() + "," + key + "," + topic + "," + target2);
+				break;
 			default:
 				System.out.println(currentGameInfo.getDay() + "" + talk.getAgent() + "," + key + "," + topic);
 				break;

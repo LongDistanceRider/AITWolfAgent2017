@@ -45,7 +45,7 @@ public class AITWolfPlayer implements Player {
 	/* ログ */
 	Logger logger;
 	/* 解析用スレッド待機時間 */
-	final static int THREAD_LIMIT_TIME = 2500;
+	final static int THREAD_LIMIT_TIME = 3000;
 	/* マルチスレッド */
 	Queue<Future<Boolean>> futureQueue;
 	/* NLPキュー */
@@ -211,7 +211,7 @@ public class AITWolfPlayer implements Player {
 			if (currentGameInfo.getDay() == 1) {
 				talkQueue.offer("どれも美味しそうだ。あ、人間は食べないよ！");
 			} else if (currentGameInfo.getDay() == 2) {
-				talkQueue.offer("ドーレーニーシーヨーウーカーナー");
+				talkQueue.offer("今晩も美味しいディナーが待ってる");
 			}
 		default:
 			break;

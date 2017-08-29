@@ -15,6 +15,7 @@ public class DammyPlayer1 implements Player {
 	boolean isCO = false;
 	/* 発言キュー */
 	Queue<String> talkQueue;
+	GameInfo currentGameInfo;
 
 	@Override
 	public Agent attack() {
@@ -54,13 +55,14 @@ public class DammyPlayer1 implements Player {
 
 	@Override
 	public void initialize(GameInfo arg0, GameSetting arg1) {
+		currentGameInfo = arg0;
 		talkQueue = new ArrayDeque<>();
 		talkQueue.offer("初めましてこれからよろしくね！");
-//		talkQueue.offer("OVER");
-//		talkQueue.offer("人狼なんていないさ");
-//		talkQueue.offer("あれ？占い師二人でた？");
-//		talkQueue.offer("Agent[1]はちょっと嘘っぽいな");
-//		talkQueue.offer("そんなことないよ");
+		talkQueue.offer(">>Agent[01] なんでそう思うの？");
+		// talkQueue.offer("人狼なんていないさ");
+		// talkQueue.offer("あれ？占い師二人でた？");
+		// talkQueue.offer("Agent[1]はちょっと嘘っぽいな");
+		// talkQueue.offer("そんなことないよ");
 
 	}
 
@@ -71,10 +73,12 @@ public class DammyPlayer1 implements Player {
 			return "はい！ぼく占い師！Agent[02]の結果は白だったよ。";
 		}
 
-		// 発言キューが空になるまで発言し続ける
-		if (!talkQueue.isEmpty()) {
-			String talk = talkQueue.poll();
-			return talk;
+		if (currentGameInfo.getDay() >= 1) {
+			// 発言キューが空になるまで発言し続ける
+			if (!talkQueue.isEmpty()) {
+				String talk = talkQueue.poll();
+				return talk;
+			}
 		}
 		return Talk.OVER;
 	}
@@ -82,7 +86,7 @@ public class DammyPlayer1 implements Player {
 	@Override
 	public void update(GameInfo arg0) {
 		// TODO 自動生成されたメソッド・スタブ
-
+		currentGameInfo = arg0;
 	}
 
 	@Override
