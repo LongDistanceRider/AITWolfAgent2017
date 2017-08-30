@@ -248,6 +248,7 @@ public class AITWolfPlayer implements Player {
 	@Override
 	public void finish() {
 		logger.config("finish()");
+
 		if (!isfinish) {
 
 			// BoardSurfaceReport
@@ -328,6 +329,7 @@ public class AITWolfPlayer implements Player {
 	@Override
 	public String talk() {
 		double start = System.nanoTime();
+		System.out.println("-----=====-- TALK --=====-----");
 		logger.config("talk()");
 		// ----- 0日目処理 -----
 		if (currentGameInfo.getDay() == 0) {
@@ -526,7 +528,7 @@ public class AITWolfPlayer implements Player {
 		List<Agent> aliveAgentList = currentGameInfo.getAliveAgentList();
 		// agentList - aliveAgentList
 		for (Agent agent : agentList) {
-			if (!aliveAgentList.contains(agent) && currentGameInfo.getExecutedAgent().equals(agent)) {
+			if (!aliveAgentList.contains(agent) && !currentGameInfo.getExecutedAgent().equals(agent)) {
 				return agent;
 			}
 		}

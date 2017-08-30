@@ -3,7 +3,7 @@ package com.icloud.itfukui0922.connect;
 public class KanolabStarter extends Starter{
 	public static void main(String[] args){
 		try {
-			startClient("com.icloud.itfukui0922.player.AITWolfPlayer", "AITWolf", "kachako.org", 10000, 5);
+			startClient("com.icloud.itfukui0922.player.AITWolfPlayer", "AITWolf", "kachako.org", 10000, 1);
 		} catch (ClassNotFoundException e) {
 			System.err.println("指定したクラスが見つかりません");
 			e.printStackTrace();
